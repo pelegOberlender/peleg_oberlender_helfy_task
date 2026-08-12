@@ -19,6 +19,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Load the tasks once when the application starts.
   useEffect(() => {
     async function loadTasks() {
       try {
@@ -34,6 +35,7 @@ export default function App() {
     loadTasks();
   }, []);
 
+  // Create a new task or update the task currently being edited.
   async function handleSaveTask(taskData) {
     try {
       setError('');
@@ -54,6 +56,7 @@ export default function App() {
       } else {
         const newTask = await createTask(taskData);
 
+        // Add the new task to the existing tasks.
         setTasks((currentTasks) => [
           ...currentTasks,
           newTask
@@ -67,6 +70,7 @@ export default function App() {
     }
   }
 
+  // Toggle the completed status of a task.
   async function handleToggleTask(id) {
     try {
       setError('');
@@ -82,7 +86,8 @@ export default function App() {
       setError(error.message);
     }
   }
-
+  
+  // Delete a task from the backend and from the local state.
   async function handleDeleteTask(id) {
     try {
       setError('');
@@ -93,6 +98,7 @@ export default function App() {
         currentTasks.filter((task) => task.id !== id)
       );
 
+      // Close the edit form if the deleted task was being edited.
       if (editingTask?.id === id) {
         setEditingTask(null);
       }
@@ -100,7 +106,8 @@ export default function App() {
       setError(error.message);
     }
   }
-
+  
+  // Send the selected task to the form for editing.
   function handleEditTask(task) {
     setEditingTask(task);
   }
@@ -109,6 +116,7 @@ export default function App() {
     setEditingTask(null);
   }
 
+  // Show only the tasks that match the selected filter.
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'pending') {
       return !task.completed;

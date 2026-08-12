@@ -7,13 +7,13 @@ export default function TaskList({
   onDelete,
   onToggle
 }) {
-  // When there are multiple tasks, index 0 is a cloned task.
-  // The first real task is therefore at index 1.
-  const [currentIndex, setCurrentIndex] = useState(
-    tasks.length > 1 ? 1 : 0
-  );
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
+    // When there are multiple tasks, index 0 is a cloned task.
+    // The first real task is therefore at index 1.
+    const [currentIndex, setCurrentIndex] = useState(
+        tasks.length > 1 ? 1 : 0
+    );
+    const [transitionEnabled, setTransitionEnabled] = useState(true);
+    const [isAnimating, setIsAnimating] = useState(false);
 
   // Add clones of the last and first tasks to create an infinite loop effect.
   const carouselTasks =
@@ -39,38 +39,38 @@ export default function TaskList({
     setIsAnimating(true);
     setCurrentIndex((index) => index + 1);
   }
+  
+    function handlePrevious() {
+        if (tasks.length <= 1 || isAnimating) {
+            return;
+        }
 
-  function handlePrevious() {
-    if (tasks.length <= 1 || isAnimating) {
-      return;
+        setTransitionEnabled(true);
+        setIsAnimating(true);
+        setCurrentIndex((index) => index - 1);
     }
 
-    setTransitionEnabled(true);
-    setIsAnimating(true);
-    setCurrentIndex((index) => index - 1);
-  }
+    function handleTransitionEnd() {
+        // If we reached the cloned last task, jump to the real last task.
+        if (currentIndex === 0) {
+            setTransitionEnabled(false);
+            setCurrentIndex(tasks.length);
+        // If we reached the cloned first task, jump to the real first task.
+        } else if (currentIndex === tasks.length + 1) {
+            setTransitionEnabled(false);
+            setCurrentIndex(1);
+        }
 
-  function handleTransitionEnd() {
-    // If we reached the cloned last task, jump to the real last task.
-    if (currentIndex === 0) {
-      setTransitionEnabled(false);
-      setCurrentIndex(tasks.length);
-    // If we reached the cloned first task, jump to the real first task.
-    } else if (currentIndex === tasks.length + 1) {
-      setTransitionEnabled(false);
-      setCurrentIndex(1);
+        setIsAnimating(false);
     }
 
-    setIsAnimating(false);
-  }
-
-  if (tasks.length === 0) {
-    return (
-      <p className="empty-message">
-        No tasks to display.
-      </p>
-    );
-  }
+    if (tasks.length === 0) {
+        return (
+        <p className="empty-message">
+            No tasks to display.
+        </p>
+        );
+    }
 
   return (
     <section className="task-list">
