@@ -3,24 +3,29 @@ const router = express.Router();
 
 const VALID_PRIORITIES = ['low', 'medium', 'high'];
 
+// In-memory storage. Tasks are cleared whenever the server restarts.
 let tasks = [] 
 
-// GET /api/tasks - return all tasks
+// GET /api/tasks - Return all tasks
 router.get('/', (req, res) => {
   res.status(200).json(tasks);
 });
 
+// POST /api/tasks - Create a new task
 router.post('/', (req, res) => {
     const {title, description, priority} = req.body;
 
+    // A task must have a non-empty title
     if (typeof title !== 'string' || !title.trim()) {
         return res.status(400).json({ error: 'Title is required' });
     }
 
+    // Description is optional, but must be text when provided
     if ( description !== undefined && typeof description !== 'string') {
         return res.status(400).json({ error: 'Description must be text' });
     }
 
+    // Use medium priority when no priority is provided
     const taskPriority = priority || 'medium';
     if (!VALID_PRIORITIES.includes(taskPriority)) {
         return res.status(400).json({ error: 'Priority must be low, medium, or high' });
@@ -39,6 +44,7 @@ router.post('/', (req, res) => {
     res.status(201).json(newTask);
 });
 
+// PUT /api/tasks/:id - Update an existing task
 router.put('/:id',(req, res) => {
     const id = Number(req.params.id);
     const task = tasks.find((task) => task.id === id)
@@ -65,8 +71,7 @@ router.put('/:id',(req, res) => {
         return res.status(400).json({ error: 'Completed must be true or false' });
     }
 
-    // Every field is validated above before anything is written, so an
-    // invalid field never leaves the task partially updated.
+    // Update only fields that were included in the request
     if (title !== undefined) task.title = title.trim();
     if (description !== undefined) task.description = description.trim();
     if (priority !== undefined) task.priority = priority;
@@ -75,6 +80,7 @@ router.put('/:id',(req, res) => {
     res.status(200).json(task);
 });
 
+// DELETE /api/tasks/:id - Delete a task
 router.delete('/:id',(req, res) => {
     const id = Number(req.params.id)
 
@@ -87,6 +93,7 @@ router.delete('/:id',(req, res) => {
     res.status(200).json({ message: 'Task deleted' });
 })
 
+// PATCH /api/tasks/:id/toggle - Toggle completion status
 router.patch('/:id/toggle', (req, res) => {
   const id = Number(req.params.id);
   const task = tasks.find((t) => t.id === id);
