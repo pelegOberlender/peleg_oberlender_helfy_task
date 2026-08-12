@@ -1,70 +1,134 @@
-# Getting Started with Create React App
+# Task Manager App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack task manager built with React, Express.js, and Node.js.
 
-## Available Scripts
+The application allows users to create, edit, delete, filter, and mark tasks as completed. Tasks are displayed in an animated endless carousel.
 
-In the project directory, you can run:
+## Technologies
 
-### `npm start`
+- React
+- Express.js
+- Node.js
+- Regular CSS
+- In-memory data storage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```text
+task-manager/
+├── backend/
+│   ├── middleware/
+│   ├── routes/
+│   ├── package.json
+│   └── server.js
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── styles/
+│   └── package.json
+├── .gitignore
+└── README.md
+```
 
-### `npm test`
+## Backend Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+cd backend
+npm install
+npm start
+```
 
-### `npm run build`
+The backend runs on:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```text
+http://localhost:4000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+For development with automatic restart:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run dev
+```
 
-### `npm run eject`
+## Frontend Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Open another terminal:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+cd frontend
+npm install
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The frontend normally runs on:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```text
+http://localhost:3000
+```
 
-## Learn More
+Both servers need to run at the same time.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API Endpoints
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/tasks` | Get all tasks |
+| POST | `/api/tasks` | Create a task |
+| PUT | `/api/tasks/:id` | Update a task |
+| DELETE | `/api/tasks/:id` | Delete a task |
+| PATCH | `/api/tasks/:id/toggle` | Toggle completion status |
 
-### Code Splitting
+### Task Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```json
+{
+  "id": 1234,
+  "title": "Add README.md",
+  "description": "",
+  "completed": false,
+  "createdAt": "2026-08-12T10:00:00.000Z",
+  "priority": "high"
+}
+```
 
-### Analyzing the Bundle Size
+## Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Create and edit tasks
+- Delete tasks with confirmation
+- Mark tasks as completed or pending
+- Filter by all, pending, or completed tasks
+- Display task priority using colored badges
+- Animated endless carousel
+- Loading and error messages
+- Responsive layout for desktop and mobile
+- Input validation on both frontend and backend
 
-### Making a Progressive Web App
+## Endless Carousel
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The carousel was implemented with React and CSS.
 
-### Advanced Configuration
+Copies of the first and last tasks are added to the carousel. After reaching a copied task, the carousel moves to the matching original task without a transition. This creates a continuous loop without a visible jump.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The carousel also handles empty lists, one task, filtering, and repeated button clicks during an animation.
 
-### Deployment
+## Validation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+A title is required when creating a task. The backend also validates the description, priority, and completed fields and returns meaningful HTTP status codes for invalid requests or missing tasks.
 
-### `npm run build` fails to minify
+## Design Decisions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Tasks are stored in memory as required, so they are removed when the backend restarts.
+- The same form is used for creating and editing tasks.
+- API requests are kept in a separate service file.
+- The application uses regular CSS without a UI framework.
+- The implementation focuses on the required features without adding unnecessary dependencies.
+
+## Time Spent
+
+- Backend API: approximately 90 minutes
+- Frontend and carousel: approximately 120 minutes
+- Styling and responsive design: approximately 30 minutes
+- Testing and fixes: approximately 30 minutes
+
