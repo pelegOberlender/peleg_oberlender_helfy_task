@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskFilter from './components/TaskFilter';
+import TaskItem from './components/TaskItem';
+
 
 import {
   getTasks,
