@@ -4,7 +4,7 @@ const router = express.Router();
 const VALID_PRIORITIES = ['low', 'medium', 'high'];
 
 // In-memory storage. Tasks are cleared whenever the server restarts.
-let tasks = [] 
+let tasks = [];
 
 // GET /api/tasks - Return all tasks
 router.get('/', (req, res) => {

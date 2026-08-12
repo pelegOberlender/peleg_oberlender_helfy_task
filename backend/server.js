@@ -19,11 +19,13 @@ app.get('/', (req, res) => {
   res.send('Task Manager API is running!');
 });
 
+// Handle requests to routes that do not exist
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
 app.use(errorHandler);
+
 // Start the backend server
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
