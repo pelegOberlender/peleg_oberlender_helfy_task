@@ -57,8 +57,11 @@ export default function App() {
           newTask
         ]);
       }
+      
+      return true;
     } catch (error) {
       setError(error.message);
+      return false;
     }
   }
 
