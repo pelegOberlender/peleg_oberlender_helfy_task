@@ -11,6 +11,10 @@ app.use(express.json());
 
 app.use('/api/tasks', taskRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Task Manager API is running!');
+});2
+
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
