@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
+import TaskFilter from './components/TaskFilter';
 
 import {
   getTasks,
@@ -57,7 +58,7 @@ export default function App() {
           newTask
         ]);
       }
-      
+
       return true;
     } catch (error) {
       setError(error.message);
@@ -108,7 +109,7 @@ export default function App() {
   }
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === 'active') {
+    if (filter === 'pending') {
       return !task.completed;
     }
 
@@ -139,31 +140,10 @@ export default function App() {
         onCancel={handleCancelEdit}
       />
 
-      <div className="filters">
-        <button
-          type="button"
-          onClick={() => setFilter('all')}
-          className={filter === 'all' ? 'active' : ''}
-        >
-          All
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilter('active')}
-          className={filter === 'active' ? 'active' : ''}
-        >
-          Active
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilter('completed')}
-          className={filter === 'completed' ? 'active' : ''}
-        >
-          Completed
-        </button>
-      </div>
+      <TaskFilter
+        filter={filter}
+        onFilterChange={setFilter}
+      />
 
       <TaskList
         tasks={filteredTasks}
