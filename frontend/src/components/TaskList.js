@@ -7,27 +7,33 @@ export default function TaskList({
   onDelete,
   onToggle
 }) {
+  // When there are multiple tasks, index 0 is a cloned task.
+  // The first real task is therefore at index 1.
   const [currentIndex, setCurrentIndex] = useState(
     tasks.length > 1 ? 1 : 0
   );
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Add clones of the last and first tasks to create an infinite loop effect.
   const carouselTasks =
     tasks.length > 1
       ? [tasks[tasks.length - 1], ...tasks, tasks[0]]
       : tasks;
 
-  useEffect(() => {
-    setTransitionEnabled(false);
-    setCurrentIndex(tasks.length > 1 ? 1 : 0);
-    setIsAnimating(false);
-  }, [tasks]);
+    // Reset the carousel whenever the tasks change.
+    useEffect(() => {
+        setTransitionEnabled(false);
+        setCurrentIndex(tasks.length > 1 ? 1 : 0);
+        setIsAnimating(false);
+    }, [tasks]);
 
-  function handleNext() {
-    if (tasks.length <= 1 || isAnimating) {
-      return;
-    }
+    // Prevent navigation when there is only one task
+    // or while the current transition is still running.
+    function handleNext() {
+        if (tasks.length <= 1 || isAnimating) {
+            return;
+        }
 
     setTransitionEnabled(true);
     setIsAnimating(true);
@@ -45,9 +51,11 @@ export default function TaskList({
   }
 
   function handleTransitionEnd() {
+    // If we reached the cloned last task, jump to the real last task.
     if (currentIndex === 0) {
       setTransitionEnabled(false);
       setCurrentIndex(tasks.length);
+    // If we reached the cloned first task, jump to the real first task.
     } else if (currentIndex === tasks.length + 1) {
       setTransitionEnabled(false);
       setCurrentIndex(1);
