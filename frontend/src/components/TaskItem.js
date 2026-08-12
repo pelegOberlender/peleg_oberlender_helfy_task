@@ -1,18 +1,18 @@
 export default function TaskItem({
-  task,
-  onEdit,
-  onDelete,
-  onToggle
+    task,
+    onEdit,
+    onDelete,
+    onToggle
 }) {
-  function handleDelete() {
-    const shouldDelete = window.confirm(
-      `Are you sure you want to delete "${task.title}"?`
-    );
+    function handleDelete() {
+        const shouldDelete = window.confirm(
+            `Are you sure you want to delete "${task.title}"?`
+        );
 
-    if (shouldDelete) {
-      onDelete(task.id);
+        if (shouldDelete) {
+            onDelete(task.id);
+        }
     }
-  }
 
   return (
     <article className={`task-item ${task.completed ? 'completed' : ''}`}>

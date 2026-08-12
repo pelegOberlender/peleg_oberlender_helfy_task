@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import TaskItem from './TaskItem';
 
 export default function TaskList({
-  tasks,
-  onEdit,
-  onDelete,
-  onToggle
+    tasks,
+    onEdit,
+    onDelete,
+    onToggle
 }) {
     // When there are multiple tasks, index 0 is a cloned task.
     // The first real task is therefore at index 1.
@@ -15,11 +15,11 @@ export default function TaskList({
     const [transitionEnabled, setTransitionEnabled] = useState(true);
     const [isAnimating, setIsAnimating] = useState(false);
 
-  // Add clones of the last and first tasks to create an infinite loop effect.
-  const carouselTasks =
-    tasks.length > 1
-      ? [tasks[tasks.length - 1], ...tasks, tasks[0]]
-      : tasks;
+    // Add clones of the last and first tasks to create an infinite loop effect.
+    const carouselTasks =
+        tasks.length > 1
+        ? [tasks[tasks.length - 1], ...tasks, tasks[0]]
+        : tasks;
 
     // Reset the carousel whenever the tasks change.
     useEffect(() => {
