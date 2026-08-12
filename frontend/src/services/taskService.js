@@ -1,22 +1,19 @@
 const API_URL = 'http://localhost:4000/api/tasks';
 
-// Helper to extract error message from response
-async function parseErrorMessage(response, fallbackMessage) {
-  try {
-    const data = await response.json();
-    return data.error || fallbackMessage;
-  } catch {
-    return fallbackMessage;
+// Helper function to handle both JSON parsing and errors in one place
+async function handleResponse(res) {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const message = data.error || (data.errors && data.errors.join(', ')) || 'Request failed';
+    throw new Error(message);
   }
+  return data;
 }
 
 // Get all tasks
 export async function getTasks() {
   const response = await fetch(API_URL);
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response, 'Failed to load tasks'));
-  }
-  return response.json();
+  return handleResponse(response);  
 }
 
 // Create a new task
@@ -26,10 +23,7 @@ export async function createTask(task) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(task)
   });
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response, 'Failed to create task'));
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 // Update existing task by ID
@@ -39,10 +33,7 @@ export async function updateTask(id, updates) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates)
   });
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response, 'Failed to update task'));
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 // Delete task by ID
@@ -50,10 +41,7 @@ export async function deleteTask(id) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE'
   });
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response, 'Failed to delete task'));
-  }
-  return response.json();
+  return handleResponse(response);
 }
 
 // Toggle completed status
@@ -61,8 +49,5 @@ export async function toggleTask(id) {
   const response = await fetch(`${API_URL}/${id}/toggle`, { 
     method: 'PATCH' 
   });
-  if (!response.ok) {
-    throw new Error(await parseErrorMessage(response, 'Failed to toggle task'));
-  }
-  return response.json();
+  return handleResponse(response);
 }
