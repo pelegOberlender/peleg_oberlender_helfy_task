@@ -17,17 +17,8 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: 'Title is required' });
     }
 
-})
-
-router.post('/', (req, res) => {
-    const {title, description, priority} = req.body;
-
-    if (typeof title !== 'string' || !title.trim()) {
-        return res.status(400).json({ error: 'Title is required' });
-    }
-
     if ( description !== undefined && typeof description !== 'string') {
-        return res.status(400).json({ error: 'Title is required' });
+        return res.status(400).json({ error: 'Description must be text' });
     }
 
     const taskPriority = priority || 'medium';
@@ -88,7 +79,7 @@ router.delete('/:id',(req, res) => {
     const id = Number(req.params.id)
 
     const idx = tasks.findIndex((task) => task.id === id);
-    if (task(id) === -1) {
+    if (idx === -1) {
         return res.status(404).json({ error: 'Task not found' });
     }
 
