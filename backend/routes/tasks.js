@@ -95,3 +95,17 @@ router.delete('/:id',(req, res) => {
     tasks.splice(idx, 1);
     res.status(200).json({ message: 'Task deleted' });
 })
+
+router.patch('/:id/toggle', (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.find((t) => t.id === id);
+
+  if (!task) {
+    return res.status(404).json({ error: 'Task not found' });
+  }
+
+  task.completed = !task.completed;
+  res.status(200).json(task);
+});
+
+module.exports = router;
